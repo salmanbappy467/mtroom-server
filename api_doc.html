@@ -1,0 +1,444 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>REB অটোমেশন API ডকুমেন্টেশন (v5.0)</title>
+    <style>
+        :root {
+            --primary: #2563eb;       /* Royal Blue */
+            --sidebar-bg: #0f172a;    /* Dark Slate */
+            --text-main: #334155;
+            --code-bg: #1e293b;
+            --accent: #0ea5e9;        /* Sky Blue */
+        }
+
+        * { box-sizing: border-box; }
+
+        body {
+            font-family: 'SolaimanLipi', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            display: flex;
+            background-color: #f8fafc;
+            color: var(--text-main);
+        }
+
+        /* সাইডবার ডিজাইন */
+        .sidebar {
+            width: 280px;
+            height: 100vh;
+            background-color: var(--sidebar-bg);
+            color: #fff;
+            position: fixed;
+            overflow-y: auto;
+            border-right: 4px solid var(--primary);
+        }
+
+        .brand {
+            padding: 20px;
+            font-size: 1.4rem;
+            font-weight: bold;
+            text-align: center;
+            border-bottom: 1px solid #334155;
+            color: var(--accent);
+        }
+
+        .nav-links { padding: 20px; }
+        
+        .nav-category {
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            color: #94a3b8;
+            margin-top: 20px;
+            margin-bottom: 10px;
+            font-weight: bold;
+            letter-spacing: 1px;
+            border-bottom: 1px solid #334155;
+            padding-bottom: 5px;
+        }
+
+        .nav-item {
+            display: block;
+            padding: 10px 15px;
+            color: #cbd5e1;
+            text-decoration: none;
+            border-radius: 6px;
+            margin-bottom: 5px;
+            font-size: 0.95rem;
+            transition: all 0.2s;
+        }
+
+        .nav-item:hover {
+            background: rgba(255,255,255,0.1);
+            color: #fff;
+            padding-left: 20px;
+        }
+
+        /* মেইন কন্টেন্ট */
+        .main-content {
+            margin-left: 280px;
+            padding: 40px;
+            width: calc(100% - 280px);
+        }
+
+        .section-card {
+            background: #fff;
+            border-radius: 12px;
+            padding: 30px;
+            margin-bottom: 40px;
+            box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05);
+            border: 1px solid #e2e8f0;
+        }
+
+        h1 { margin-top: 0; color: #1e293b; border-bottom: 2px solid #e2e8f0; padding-bottom: 10px; }
+        h2 { 
+            color: #1e293b; 
+            border-left: 5px solid var(--primary);
+            padding-left: 15px;
+            margin-top: 0;
+        }
+        h3 { color: #475569; margin-top: 25px; font-size: 1.1rem; }
+
+        /* ব্যাজ এবং এন্ডপয়েন্ট */
+        .badge {
+            display: inline-block;
+            padding: 5px 10px;
+            border-radius: 5px;
+            color: white;
+            font-weight: bold;
+            font-size: 0.8rem;
+            vertical-align: middle;
+            margin-right: 10px;
+        }
+        .post { background-color: #10b981; } /* Green */
+        .get { background-color: #3b82f6; }  /* Blue */
+
+        .endpoint {
+            font-family: monospace;
+            background: #f1f5f9;
+            padding: 8px 12px;
+            border-radius: 6px;
+            color: #db2777;
+            border: 1px solid #cbd5e1;
+            font-size: 1rem;
+            font-weight: bold;
+        }
+
+        /* কোড ব্লক */
+        pre {
+            background: var(--code-bg);
+            color: #a5f3fc;
+            padding: 20px;
+            border-radius: 8px;
+            overflow-x: auto;
+            font-family: 'Consolas', monospace;
+            font-size: 0.9rem;
+            border: 1px solid #334155;
+        }
+
+        .comment { color: #94a3b8; font-style: italic; }
+
+        /* টেবিল ডিজাইন */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 15px;
+            font-size: 0.95rem;
+        }
+        th {
+            background: #f1f5f9;
+            text-align: left;
+            padding: 12px;
+            border-bottom: 2px solid #e2e8f0;
+            color: #334155;
+            font-weight: bold;
+        }
+        td {
+            padding: 12px;
+            border-bottom: 1px solid #e2e8f0;
+            color: #475569;
+        }
+        tr:hover { background-color: #f8fafc; }
+
+        /* স্ট্যাটাস কালার */
+        .req { color: #dc2626; font-weight: bold; background: #fee2e2; padding: 2px 6px; border-radius: 4px; font-size: 0.75rem;}
+        
+    </style>
+</head>
+<body>
+
+    <div class="sidebar">
+        <div class="brand">⚡ REB API V5.0</div>
+        <div class="nav-links">
+            <div class="nav-category">মডিউল সমূহ</div>
+            <a href="#intro" class="nav-item">📌 ভূমিকা (Introduction)</a>
+            <a href="#login-check" class="nav-item">🔑 লগইন যাচাই (Login Check)</a>
+            <a href="#meter-post" class="nav-item">📦 মিটার পোস্ট (Bulk Post)</a>
+            <a href="#single-check" class="nav-item">🔍 সিঙ্গেল চেক (Check)</a>
+            <a href="#inventory" class="nav-item">📋 ইনভেন্টরি লিস্ট (List)</a>
+            <a href="#delete-meter" class="nav-item" style="color: #fca5a5;">🗑️ মিটার ডিলিট (New)</a>
+
+            <div class="nav-category">রেফারেন্স ডাটা</div>
+            <a href="#all-fields" class="nav-item">⚙️ ২৯টি ইনপুট ফিল্ড</a>
+            <a href="#manufacturers" class="nav-item">NUM ম্যানুফ্যাকচারার কোড</a>
+        </div>
+    </div>
+
+    <div class="main-content">
+
+        <section id="intro" class="section-card">
+            <h1>REB PBS মিটার অটোমেশন API</h1>
+            <p>এই API ব্যবহার করে আপনি <strong>rebpbs.com</strong>-এর লিগ্যাসি সিস্টেমে খুব দ্রুত মিটার এন্ট্রি, ভেরিফিকেশন এবং ইনভেন্টরি ম্যানেজমেন্ট করতে পারবেন।</p>
+            <p><strong>প্রধান সুবিধাসমূহ:</strong></p>
+            <ul>
+                <li><strong>সুপার ফাস্ট বাল্ক পোস্টিং:</strong> একসাথে অনেকগুলো মিটার পোস্ট করে একবারে ভেরিফাই করার সুবিধা।</li>
+                <li><strong>নির্ভুল ডাটা:</strong> ২৯টি ফিল্ডের পূর্ণাঙ্গ সাপোর্ট এবং ডুপ্লিকেট চেকিং।</li>
+                <li><strong>অটোমেটিক লগইন:</strong> সেশন এক্সপায়ার হলে অটোমেটিক রিকভারি।</li>
+            </ul>
+        </section>
+
+        <section id="login-check" class="section-card">
+            <h2>1. লগইন ও অফিস তথ্য যাচাই</h2>
+            <p>লগইন ঠিক আছে কিনা এবং ব্যবহারকারীর <strong>PBS</strong> ও <strong>Zonal Office</strong> এর নাম জানার জন্য এটি ব্যবহার করুন।</p>
+            
+            <div style="margin-bottom: 20px;">
+                <span class="badge post">POST</span>
+                <span class="endpoint">/api/login-check</span>
+            </div>
+
+            <h3>📥 রিকোয়েস্ট (Request)</h3>
+<pre>{
+  "userid": "535703",
+  "password": "MY_PASSWORD"
+}</pre>
+
+            <h3>📤 রেসপন্স (Response)</h3>
+<pre>{
+  "status": "success",
+  "pbs": "Sirajganj PBS-2",        <span class="comment">// পিবিএস এর নাম</span>
+  "zonal": "Belkuchi Zonal Office" <span class="comment">// জোনাল অফিসের নাম</span>
+}</pre>
+        </section>
+
+        <section id="meter-post" class="section-card">
+            <h2>2. বাল্ক মিটার পোস্ট (Post & Verify)</h2>
+            <p>এটি সিস্টেমের প্রধান এপিআই। এটি ডাটা পোস্ট করে এবং শেষে সার্ভার থেকে লাইভ ভেরিফিকেশন স্ট্যাটাস রিটার্ন করে।</p>
+            
+            <div style="margin-bottom: 20px;">
+                <span class="badge post">POST</span>
+                <span class="endpoint">/api/meter-post</span>
+            </div>
+
+            <h3>📥 রিকোয়েস্ট (Request)</h3>
+<pre>{
+  "userid": "535703",
+  "password": "MY_PASSWORD",
+  "meters": [
+    {
+      "meterNo": "B250245253",     <span class="comment">// (আবশ্যিক)</span>
+      "sealNo": "115883801",       <span class="comment">// (আবশ্যিক)</span>
+      "manufacturerId": "581",     <span class="comment">// (ঐচ্ছিক) ডিফল্ট: 581</span>
+      "reading": "0"               <span class="comment">// (ঐচ্ছিক) ডিফল্ট: 0</span>
+    }
+  ]
+}</pre>
+
+            <h3>📤 রেসপন্স (Response)</h3>
+<pre>{
+  "status": "completed",
+  "count": 1,
+  "failed": 0,
+  "data": [
+    {
+      "manufacturer": "Badhon",
+      "meterNo": "B250245253",
+      "sealNo": "115883801",
+      "postStatus": "SUCCESS",      <span class="comment">// পোস্ট সফল হয়েছে কিনা</span>
+      "isDuplicate": false,         <span class="comment">// ডুপ্লিকেট কিনা</span>
+      "serverError": "Saved Successfully",
+      "liveStatus": "Free",         <span class="comment">// বর্তমান অবস্থা (Free/Booked)</span>
+      "cmo": "N/A"
+    }
+  ]
+}</pre>
+        </section>
+           <section id="fast-post" class="section-card" style="border: 2px solid #f472b6;">
+            <h2 style="color: #db2777;">3. 🚀 আল্ট্রা ফাস্ট পোস্ট (Ultra Fast Post)</h2>
+            <p>এটি <strong>সবচেয়ে দ্রুততম</strong> পদ্ধতি। এটি প্যারালাল প্রসেসিং (Concurrent/Parallel) ব্যবহার করে একসাথে সব মিটার সার্ভারে পাঠায়।</p>
+            <p><strong>⚠️ নোট:</strong> এই পদ্ধতিতে স্পিড সবচেয়ে বেশি পাওয়া যায় কারণ এটি পোস্ট করার পর পুনরায় চেক (Verification) করে না। নিজস্ব সার্ভারের জন্য এটি পারফেক্ট।</p>
+            
+            <div style="margin-bottom: 20px;">
+                <span class="badge fast">POST</span>
+                <span class="endpoint">/api/fast-post</span>
+            </div>
+
+            <h3>📥 রিকোয়েস্ট (একই রকম)</h3>
+<pre>{
+  "userid": "535703",
+  "password": "MY_PASSWORD",
+  "meters": [ ...Array of Meters... ]
+}</pre>
+
+            <h3>📤 রেসপন্স (Response)</h3>
+<pre>{
+  "status": "completed_concurrent",
+  "mode": "Ultra-Fast (Parallel)",
+  "count": 50,
+  "failed": 0,
+  "data": [
+    {
+      "meterNo": "B250245253",
+      "sealNo": "115883801",
+      "postStatus": "SUCCESS",       <span class="comment">// শুধু সাবমিশন স্ট্যাটাস</span>
+      "reason": "Saved Successfully",
+      "isDuplicate": false
+    },
+    { ... }
+  ]
+}</pre>
+        </section>
+
+        <section id="delete-meter" class="section-card" style="border-left: 5px solid #ef4444;">
+    <h2 style="color: #ef4444;">2. মিটার ডিলিট (Delete Meter) 🗑️</h2>
+    <p>সিস্টেম থেকে একটি আন-অ্যাসাইনড (Unassigned) মিটার মুছে ফেলার জন্য। এটি প্রথমে মিটারটি খুঁজে বের করে এবং তারপর ডিলিট করে।</p>
+    
+    <div style="margin-bottom: 20px;">
+        <span class="badge del" style="background-color: #ef4444; color: white; padding: 5px 10px; border-radius: 5px; font-weight: bold;">POST</span>
+        <span class="endpoint" style="background: #f1f5f9; padding: 8px 12px; border-radius: 6px; color: #db2777; font-family: monospace; font-weight: bold;">/api/delete-meter</span>
+    </div>
+
+    <h3>📥 রিকোয়েস্ট বডি (JSON)</h3>
+<pre style="background: #1e293b; color: #a5f3fc; padding: 20px; border-radius: 8px; overflow-x: auto;">{
+  "userid": "535703",
+  "password": "MY_PASSWORD",
+  "meterNo": "dzo302"   <span style="color: #94a3b8; font-style: italic;">// যে মিটারটি ডিলিট করতে চান</span>
+}</pre>
+
+    <h3>📤 সফল রেসপন্স</h3>
+<pre style="background: #1e293b; color: #a5f3fc; padding: 20px; border-radius: 8px; overflow-x: auto;">{
+  "success": true,
+  "message": "Meter dzo302 deleted successfully!"
+}</pre>
+
+    <h3>📤 ব্যর্থ রেসপন্স</h3>
+<pre style="background: #1e293b; color: #a5f3fc; padding: 20px; border-radius: 8px; overflow-x: auto;">{
+  "success": false,
+  "message": "Meter not found in search result"
+}</pre>
+</section>
+
+        <section id="all-fields" class="section-card">
+            <h2>⚙️ ২৯টি ইনপুট ফিল্ড (পূর্ণাঙ্গ তালিকা)</h2>
+            <p>সিস্টেম ডিফল্টভাবে ২৯টি ফিল্ড সার্ভারে সাবমিট করে। আপনি নিচের কি (Key) গুলো ব্যবহার করে নির্দিষ্ট ফিল্ডের মান পরিবর্তন করতে পারেন। বাকিগুলো অটোমেটিক <strong>"0"</strong> বা ডিফল্ট ভ্যালু নিয়ে নেবে।</p>
+
+            <table>
+                <thead>
+                    <tr>
+                        <th width="25%">JSON Key Name</th>
+                        <th width="15%">Default</th>
+                        <th>বিবরণ (Description)</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr><td><code>meterNo</code> <span class="req">REQ</span></td><td>-</td><td>মিটার নম্বর (অবশ্যই দিতে হবে)</td></tr>
+                    <tr><td><code>sealNo</code> <span class="req">REQ</span></td><td>-</td><td>সিল নম্বর (অবশ্যই দিতে হবে)</td></tr>
+                    <tr><td><code>manufacturerId</code></td><td>581</td><td>ব্র্যান্ড কোড (নিচে তালিকা দেখুন)</td></tr>
+                    <tr><td><code>paymentMode</code></td><td>1</td><td>1=Postpaid, 2=Prepaid</td></tr>
+                    <tr><td><code>phase</code></td><td>1</td><td>Phase (1 or 3)</td></tr>
+                    <tr><td><code>volt</code></td><td>240</td><td>Voltage (240 or 440)</td></tr>
+                    <tr><td><code>meterType</code></td><td>j-39</td><td>Meter Model Type</td></tr>
+                    <tr><td><code>multiplier</code></td><td>1</td><td>Reading Multiplier</td></tr>
+                    <tr><td><code>ctRatio</code></td><td>1</td><td>CT Ratio (e.g., 50/5)</td></tr>
+                    <tr><td><code>ptRatio</code></td><td>1</td><td>PT Ratio</td></tr>
+                    <tr><td><code>initialReading</code></td><td>0</td><td>শুরুর রিডিং (KWH)</td></tr>
+                    <tr><td><code>demandReading</code></td><td>0</td><td>ডিমান্ড রিডিং</td></tr>
+                    <tr><td><code>kwhReading</code></td><td>0</td><td>বর্তমান KWH রিডিং</td></tr>
+                    <tr><td><code>bodySealText</code></td><td>LS</td><td>Body Seal Text (যেমন: LS, P, R)</td></tr>
+                    <tr><td colspan="3" style="background:#f1f5f9; font-weight:bold; text-align:center;">Advanced / Rarely Used Fields</td></tr>
+                    <tr><td><code>ctManufacturer</code></td><td>(Empty)</td><td>CT Manufacturer Name</td></tr>
+                    <tr><td><code>ctSerial</code></td><td>(Empty)</td><td>CT Serial No</td></tr>
+                    <tr><td><code>ctSeal</code></td><td>(Empty)</td><td>CT Seal No</td></tr>
+                    <tr><td><code>ptManufacturer</code></td><td>(Empty)</td><td>PT Manufacturer Name</td></tr>
+                    <tr><td><code>ptSerial</code></td><td>(Empty)</td><td>PT Serial No</td></tr>
+                    <tr><td><code>bodySeal1</code></td><td>LS</td><td>Extra Body Seal 1</td></tr>
+                    <tr><td><code>bodySeal2</code></td><td>LS</td><td>Extra Body Seal 2</td></tr>
+                    <tr><td><code>terminal</code></td><td>LS</td><td>Terminal Seal 1</td></tr>
+                    <tr><td><code>terminal2</code></td><td>(Empty)</td><td>Terminal Seal 2</td></tr>
+                </tbody>
+            </table>
+        </section>
+
+        <section id="manufacturers" class="section-card">
+            <h2>🔢 ম্যানুফ্যাকচারার কোড লিস্ট</h2>
+            <p>সঠিক ব্র্যান্ড সিলেক্ট করতে <code>manufacturerId</code> ফিল্ডে এই কোডগুলো ব্যবহার করুন।</p>
+            
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
+                <table>
+                    <tr><th>Code</th><th>Brand Name</th></tr>
+                    <tr><td><strong>581</strong></td><td>Badhon (Default)</td></tr>
+                    <tr><td><strong>41</strong></td><td>Hexing Inc.</td></tr>
+                    <tr><td><strong>141</strong></td><td>B and T</td></tr>
+                    <tr><td><strong>1702</strong></td><td>B and T (New)</td></tr>
+                    <tr><td><strong>161</strong></td><td>TECHNO</td></tr>
+                    <tr><td><strong>201</strong></td><td>D Tech</td></tr>
+                    <tr><td><strong>39</strong></td><td>Super Star</td></tr>
+                    <tr><td><strong>541</strong></td><td>Smart</td></tr>
+                    <tr><td><strong>61</strong></td><td>Power Plus</td></tr>
+                    <tr><td><strong>64</strong></td><td>Echo</td></tr>
+                </table>
+                
+                <table>
+                    <tr><th>Code</th><th>Brand Name</th></tr>
+                    <tr><td><strong>81</strong></td><td>Holley</td></tr>
+                    <tr><td><strong>301</strong></td><td>HOSAF</td></tr>
+                    <tr><td><strong>321</strong></td><td>PASHA</td></tr>
+                    <tr><td><strong>241</strong></td><td>Cell Meter</td></tr>
+                    <tr><td><strong>261</strong></td><td>Hexcell</td></tr>
+                    <tr><td><strong>281</strong></td><td>Kaifa</td></tr>
+                    <tr><td><strong>341</strong></td><td>Wasion</td></tr>
+                    <tr><td><strong>402</strong></td><td>FUJI</td></tr>
+                    <tr><td><strong>421</strong></td><td>Libra</td></tr>
+                    <tr><td><strong>601</strong></td><td>JFJ</td></tr>
+                </table>
+            </div>
+        </section>
+
+        <section id="single-check" class="section-card">
+            <h2>🔍 সিঙ্গেল চেক (Single Status Check)</h2>
+            <p>কোনো এন্ট্রি ছাড়াই নির্দিষ্ট একটি মিটারের বর্তমান অবস্থা জানার জন্য।</p>
+            <span class="badge post">POST</span> <span class="endpoint">/api/single-check</span>
+            
+            <h3>রেসপন্স (Response):</h3>
+<pre>{
+  "status": "found",
+  "data": {
+     "brand": "Badhon",
+     "meterNo": "B250245253",
+     "status": "Booked",    <span class="comment">// বা Free</span>
+     "cmo": "55667788",     <span class="comment">// বুকড হলে এখানে CMO নম্বর থাকবে</span>
+     "date": "22/12/2025"
+  }
+}</pre>
+        </section>
+
+        <section id="inventory" class="section-card">
+            <h2>📋 ইনভেন্টরি লিস্ট (Inventory List)</h2>
+            <p>স্টকে থাকা মিটারের তালিকা নামানোর জন্য। <code>limit</code> ব্যবহার করে কতগুলো ডাটা চান তা বলে দিন।</p>
+            <span class="badge post">POST</span> <span class="endpoint">/api/all-meter-list</span>
+            
+            <h3>রিকোয়েস্ট (Request):</h3>
+<pre>{
+  "userid": "535703",
+  "password": "PASSWORD",
+  "limit": 50   <span class="comment">// ৫০টি ডাটা চাইলে অটোমেটিক ৩টি পেজ খুঁজবে</span>
+}</pre>
+        </section>
+
+        <footer style="text-align: center; color: #94a3b8; padding: 20px; font-size: 0.8rem; border-top: 1px solid #e2e8f0; margin-top: 20px;">
+            &copy; 2025 REB Meter Automation System | Version 5.0
+        </footer>
+
+    </div>
+
+</body>
+</html>
